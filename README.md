@@ -112,40 +112,6 @@ VITE_MAPBOX_TOKEN=your_mapbox_token
 VITE_API_BASE_URL=http://localhost:8000
 ```
 
-## Data Acquisition
-
-Use Google Earth Engine Code Editor with:
-
-```text
-scripts/gee/wildfire_features_export.js
-```
-
-Follow the detailed guide:
-
-```text
-docs/DATA_ACQUISITION.md
-```
-
-After the Earth Engine tasks finish, place the exported files in:
-
-```text
-data/raw/
-```
-
-Required CSV:
-
-```text
-data/raw/wildfire_dataset_samples.csv
-```
-
-Recommended shapefile outputs:
-
-```text
-data/raw/burned_points.*
-data/raw/unburned_points.*
-data/raw/samplepoints.*
-```
-
 ## Run the Full Model Pipeline
 
 From the repository root:
