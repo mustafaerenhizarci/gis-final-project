@@ -1,0 +1,17 @@
+{
+  "name": "gis-final-project",
+  "private": true,
+  "workspaces": [
+    "apps/web"
+  ],
+  "scripts": {
+    "dev:api": "cd apps/api && .venv/bin/uvicorn app.main:app --reload --port 8000",
+    "dev:web": "npm --workspace apps/web run dev",
+    "build:web": "npm --workspace apps/web run build",
+    "preview:web": "npm --workspace apps/web run preview",
+    "data:prepare": "apps/api/.venv/bin/python scripts/prepare_dataset.py",
+    "models:train": "apps/api/.venv/bin/python scripts/train_model.py",
+    "risk:geojson": "apps/api/.venv/bin/python scripts/create_risk_geojson.py",
+    "models:run": "npm run data:prepare && npm run models:train && npm run risk:geojson"
+  }
+}

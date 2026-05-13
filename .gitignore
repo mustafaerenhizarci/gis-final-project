@@ -1,0 +1,30 @@
+# OS/editor
+.DS_Store
+.idea/
+.vscode/
+PLAN.md
+docs/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# Environment
+.env
+.env.local
+
+# Generated frontend copies
+apps/web/public/data/*.tmp
+
+# Keep project datasets, model outputs, and report artifacts in git.
+# The final project is small enough to version these files directly.

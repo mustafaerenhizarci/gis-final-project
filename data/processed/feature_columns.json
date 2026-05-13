@@ -1,0 +1,56 @@
+{
+  "dataset_columns": [
+    "id",
+    "Label",
+    "elevation",
+    "slope",
+    "aspect",
+    "ndvi_before",
+    "nbr_before",
+    "ndmi_before",
+    "evi_before",
+    "land_cover",
+    "temperature",
+    "wind_speed",
+    "precipitation",
+    "soil_moisture",
+    "distance_to_water",
+    "distance_to_builtup",
+    "distance_to_cropland",
+    "ndvi_after",
+    "nbr_after",
+    "dnbr",
+    "longitude",
+    "latitude"
+  ],
+  "model_feature_columns": [
+    "elevation",
+    "slope",
+    "aspect",
+    "ndvi_before",
+    "nbr_before",
+    "ndmi_before",
+    "evi_before",
+    "land_cover",
+    "temperature",
+    "wind_speed",
+    "precipitation",
+    "soil_moisture",
+    "distance_to_water",
+    "distance_to_builtup",
+    "distance_to_cropland"
+  ],
+  "excluded_from_model": [
+    "ndvi_after",
+    "nbr_after",
+    "dnbr"
+  ],
+  "exclusion_reason": "post-fire and label-derived variables would cause data leakage",
+  "non_susceptible_land_cover_excluded": [
+    50,
+    70,
+    80
+  ],
+  "training_rows_before_balance": 997,
+  "training_rows_after_balance": 996
+}
