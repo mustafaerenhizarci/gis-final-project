@@ -43,6 +43,8 @@ VALID_RANGES = {
     "distance_to_cropland": (0.0, 10000.0),
 }
 
+SCENARIO_CORRECTION_LIMIT = 0.25
+
 
 class RiskModel:
     def __init__(self) -> None:
@@ -61,11 +63,7 @@ class RiskModel:
         return model
 
     def predict_score(self, features: FeatureVector, scenario: ScenarioParams) -> float:
-        adjusted = features.model_copy(deep=True)
-        adjusted.temperature += scenario.temperature_delta
-        adjusted.wind_speed += scenario.wind_speed_delta
-        adjusted.precipitation += scenario.precipitation_delta
-        adjusted = self._sanitize_features(adjusted)
+        adjusted = self._sanitize_features(features)
 
         if int(round(adjusted.land_cover)) in {50, 70, 80}:
             return 0.0
@@ -75,8 +73,10 @@ class RiskModel:
 
         row = np.array([[getattr(adjusted, name) for name in FEATURE_ORDER]])
         if hasattr(self.model, "predict_proba"):
-            return float(self.model.predict_proba(row)[0][1])
-        return float(self.model.predict(row)[0])
+            score = float(self.model.predict_proba(row)[0][1])
+        else:
+            score = float(self.model.predict(row)[0])
+        return self._apply_scenario_correction(score, scenario)
 
     def predict_scores(self, features: list[FeatureVector], scenario: ScenarioParams) -> list[float]:
         if not features:
@@ -85,21 +85,18 @@ class RiskModel:
         adjusted_features = []
         non_susceptible_indexes = set()
         for index, feature in enumerate(features):
-            adjusted = feature.model_copy(deep=True)
-            adjusted.temperature += scenario.temperature_delta
-            adjusted.wind_speed += scenario.wind_speed_delta
-            adjusted.precipitation += scenario.precipitation_delta
-            adjusted = self._sanitize_features(adjusted)
+            adjusted = self._sanitize_features(feature)
             adjusted_features.append(adjusted)
 
             if int(round(adjusted.land_cover)) in {50, 70, 80}:
                 non_susceptible_indexes.add(index)
 
         if self.model is None:
-            return [
+            scores = [
                 0.0 if index in non_susceptible_indexes else self._fallback_score(feature)
                 for index, feature in enumerate(adjusted_features)
             ]
+            return self._apply_scenario_correction_array(np.array(scores), scenario, non_susceptible_indexes).tolist()
 
         rows = np.array([
             [getattr(feature, name) for name in FEATURE_ORDER]
@@ -110,10 +107,11 @@ class RiskModel:
         else:
             scores = self.model.predict(rows)
 
-        result = []
-        for index, score in enumerate(scores):
-            result.append(0.0 if index in non_susceptible_indexes else float(score))
-        return result
+        return self._apply_scenario_correction_array(
+            np.asarray(scores, dtype=float),
+            scenario,
+            non_susceptible_indexes,
+        ).tolist()
 
     def predict_scores_from_records(self, records: list[dict], scenario=None) -> list[float]:
         if not records:
@@ -128,15 +126,21 @@ class RiskModel:
             dtype=float,
         )
 
-        rows[:, FEATURE_ORDER.index("temperature")] += float(scenario.get("temperature_delta", 0.0))
-        rows[:, FEATURE_ORDER.index("wind_speed")] += float(scenario.get("wind_speed_delta", 0.0))
-        rows[:, FEATURE_ORDER.index("precipitation")] += float(scenario.get("precipitation_delta", 0.0))
-
         for column_index, name in enumerate(FEATURE_ORDER):
             minimum, maximum = VALID_RANGES[name]
             rows[:, column_index] = np.clip(rows[:, column_index], minimum, maximum)
             if name == "land_cover":
                 rows[:, column_index] = np.round(rows[:, column_index] / 10.0) * 10.0
+
+        model_rows = rows.copy()
+        model_rows[:, FEATURE_ORDER.index("temperature")] -= float(scenario.get("temperature_delta", 0.0))
+        model_rows[:, FEATURE_ORDER.index("wind_speed")] -= float(scenario.get("wind_speed_delta", 0.0))
+        model_rows[:, FEATURE_ORDER.index("precipitation")] -= float(scenario.get("precipitation_delta", 0.0))
+        model_rows[:, FEATURE_ORDER.index("soil_moisture")] -= float(scenario.get("soil_moisture_delta", 0.0))
+        for name in ["temperature", "wind_speed", "precipitation", "soil_moisture"]:
+            column_index = FEATURE_ORDER.index(name)
+            minimum, maximum = VALID_RANGES[name]
+            model_rows[:, column_index] = np.clip(model_rows[:, column_index], minimum, maximum)
 
         land_cover = rows[:, FEATURE_ORDER.index("land_cover")]
         non_susceptible_mask = np.isin(land_cover, [50.0, 70.0, 80.0])
@@ -144,15 +148,19 @@ class RiskModel:
         if self.model is None:
             scores = np.array([
                 self._fallback_score(FeatureVector(**dict(zip(FEATURE_ORDER, row))))
-                for row in rows
+                for row in model_rows
             ])
         elif hasattr(self.model, "predict_proba"):
-            scores = self.model.predict_proba(rows)[:, 1]
+            scores = self.model.predict_proba(model_rows)[:, 1]
         else:
-            scores = self.model.predict(rows)
+            scores = self.model.predict(model_rows)
 
         scores = np.asarray(scores, dtype=float)
-        scores[non_susceptible_mask] = 0.0
+        scores = self._apply_scenario_correction_array(
+            scores,
+            scenario,
+            set(np.flatnonzero(non_susceptible_mask).tolist()),
+        )
         return scores.tolist()
 
     def _fallback_score(self, features: FeatureVector) -> float:
@@ -173,6 +181,41 @@ class RiskModel:
                 value = round(value / 10) * 10
             setattr(clean, name, value)
         return clean
+
+    def _scenario_adjustment(self, scenario) -> float:
+        if isinstance(scenario, ScenarioParams):
+            temperature_delta = scenario.temperature_delta
+            wind_speed_delta = scenario.wind_speed_delta
+            precipitation_delta = scenario.precipitation_delta
+            soil_moisture_delta = scenario.soil_moisture_delta
+        else:
+            temperature_delta = float(scenario.get("temperature_delta", 0.0))
+            wind_speed_delta = float(scenario.get("wind_speed_delta", 0.0))
+            precipitation_delta = float(scenario.get("precipitation_delta", 0.0))
+            soil_moisture_delta = float(scenario.get("soil_moisture_delta", 0.0))
+
+        adjustment = (
+            0.018 * temperature_delta
+            + 0.025 * wind_speed_delta
+            - 0.010 * precipitation_delta
+            - 1.200 * soil_moisture_delta
+        )
+        return float(np.clip(adjustment, -SCENARIO_CORRECTION_LIMIT, SCENARIO_CORRECTION_LIMIT))
+
+    def _apply_scenario_correction(self, score: float, scenario) -> float:
+        corrected = score + self._scenario_adjustment(scenario)
+        return float(np.clip(corrected, 0.0, 1.0))
+
+    def _apply_scenario_correction_array(
+        self,
+        scores: np.ndarray,
+        scenario,
+        non_susceptible_indexes: set[int],
+    ) -> np.ndarray:
+        corrected = np.clip(scores + self._scenario_adjustment(scenario), 0.0, 1.0)
+        if non_susceptible_indexes:
+            corrected[list(non_susceptible_indexes)] = 0.0
+        return corrected
 
 
 def risk_class(score: float) -> str:

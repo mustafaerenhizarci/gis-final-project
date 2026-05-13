@@ -371,9 +371,10 @@ export function MapView({ scenario }: Props) {
       const result = await predictBatch(
         items,
         {
-          temperature_delta: 0,
-          wind_speed_delta: 0,
-          precipitation_delta: 0
+          temperature_delta: scenario.temperature,
+          wind_speed_delta: scenario.wind_speed,
+          precipitation_delta: scenario.precipitation,
+          soil_moisture_delta: scenario.soil_moisture
         },
         { signal: abortController.signal }
       );

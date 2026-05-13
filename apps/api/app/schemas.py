@@ -26,6 +26,7 @@ class ScenarioParams(BaseModel):
     temperature_delta: float = 0
     wind_speed_delta: float = 0
     precipitation_delta: float = 0
+    soil_moisture_delta: float = 0
 
 
 class PredictRequest(BaseModel):

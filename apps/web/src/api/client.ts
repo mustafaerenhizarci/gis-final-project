@@ -4,6 +4,7 @@ type ScenarioPayload = {
   temperature_delta: number;
   wind_speed_delta: number;
   precipitation_delta: number;
+  soil_moisture_delta: number;
 };
 
 type BatchItem = {
