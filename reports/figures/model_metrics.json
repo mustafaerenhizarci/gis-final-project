@@ -17,14 +17,14 @@
     "distance_to_cropland"
   ],
   "label_counts": {
-    "0": 498,
-    "1": 498
+    "0": 500,
+    "1": 500
   },
   "test_size": 200,
-  "train_size": 796,
-  "best_model": "logistic_regression_baseline",
-  "best_family": "logistic_regression",
-  "best_variant": "baseline",
+  "train_size": 800,
+  "best_model": "random_forest_tuned",
+  "best_family": "random_forest",
+  "best_variant": "tuned",
   "metrics": [
     {
       "family": "random_forest",
@@ -35,19 +35,19 @@
         "max_depth": null,
         "min_samples_leaf": 1
       },
-      "accuracy": 0.54,
-      "precision": 0.5417,
-      "recall": 0.52,
-      "f1": 0.5306,
-      "roc_auc": 0.5792,
+      "accuracy": 0.57,
+      "precision": 0.5648,
+      "recall": 0.61,
+      "f1": 0.5865,
+      "roc_auc": 0.6102,
       "confusion_matrix": [
         [
-          56,
-          44
+          53,
+          47
         ],
         [
-          48,
-          52
+          39,
+          61
         ]
       ]
     },
@@ -60,19 +60,19 @@
         "max_depth": 8,
         "min_samples_leaf": 3
       },
-      "accuracy": 0.545,
-      "precision": 0.5385,
-      "recall": 0.63,
-      "f1": 0.5806,
-      "roc_auc": 0.5821,
+      "accuracy": 0.59,
+      "precision": 0.5804,
+      "recall": 0.65,
+      "f1": 0.6132,
+      "roc_auc": 0.6333,
       "confusion_matrix": [
         [
-          46,
-          54
+          53,
+          47
         ],
         [
-          37,
-          63
+          35,
+          65
         ]
       ]
     },
@@ -85,19 +85,19 @@
         "C": 1.0,
         "gamma": "scale"
       },
-      "accuracy": 0.56,
-      "precision": 0.5545,
-      "recall": 0.61,
-      "f1": 0.581,
-      "roc_auc": 0.5821,
+      "accuracy": 0.59,
+      "precision": 0.5833,
+      "recall": 0.63,
+      "f1": 0.6058,
+      "roc_auc": 0.6296,
       "confusion_matrix": [
         [
-          51,
-          49
+          55,
+          45
         ],
         [
-          39,
-          61
+          37,
+          63
         ]
       ]
     },
@@ -110,19 +110,19 @@
         "C": 10.0,
         "gamma": "scale"
       },
-      "accuracy": 0.55,
-      "precision": 0.5521,
-      "recall": 0.53,
-      "f1": 0.5408,
-      "roc_auc": 0.5647,
+      "accuracy": 0.575,
+      "precision": 0.5728,
+      "recall": 0.59,
+      "f1": 0.5813,
+      "roc_auc": 0.5949,
       "confusion_matrix": [
         [
-          57,
-          43
+          56,
+          44
         ],
         [
-          47,
-          53
+          41,
+          59
         ]
       ]
     },
@@ -135,19 +135,19 @@
         "penalty": "l2",
         "solver": "lbfgs"
       },
-      "accuracy": 0.56,
-      "precision": 0.5536,
-      "recall": 0.62,
-      "f1": 0.5849,
-      "roc_auc": 0.593,
+      "accuracy": 0.59,
+      "precision": 0.5918,
+      "recall": 0.58,
+      "f1": 0.5859,
+      "roc_auc": 0.6236,
       "confusion_matrix": [
         [
-          50,
-          50
+          60,
+          40
         ],
         [
-          38,
-          62
+          42,
+          58
         ]
       ]
     },
@@ -160,19 +160,19 @@
         "penalty": "l2",
         "solver": "lbfgs"
       },
-      "accuracy": 0.54,
-      "precision": 0.5345,
-      "recall": 0.62,
-      "f1": 0.5741,
-      "roc_auc": 0.5732,
+      "accuracy": 0.59,
+      "precision": 0.5882,
+      "recall": 0.6,
+      "f1": 0.5941,
+      "roc_auc": 0.6145,
       "confusion_matrix": [
         [
-          46,
-          54
+          58,
+          42
         ],
         [
-          38,
-          62
+          40,
+          60
         ]
       ]
     }

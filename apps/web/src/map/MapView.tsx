@@ -96,8 +96,8 @@ function formatFeatureValue(value: number, unit: string) {
 }
 
 function buildPointComparison(
-  baseFeature: GeoJSON.Feature<PointFeature> | undefined,
-  currentFeature: GeoJSON.Feature<PointFeature> | undefined,
+  baseFeature: GeoJSON.Feature<GeoJSON.Geometry, PointFeature> | undefined,
+  currentFeature: GeoJSON.Feature<GeoJSON.Geometry, PointFeature> | undefined,
   scenario: ScenarioState
 ): PointComparison | null {
   if (!currentFeature?.properties) {
@@ -237,7 +237,7 @@ export function MapView({ scenario }: Props) {
 
     mapRef.current = new mapboxgl.Map({
       container: containerRef.current,
-      style: "mapbox://styles/mustafaerenhizarci/cmp2ysw97000t01qw0kpefui6",
+      style: "mapbox://styles/mustafaerenhizarci/cmp5r4l2w004e01s7fx0743ch",
       center: STUDY_AREA_CENTER,
       zoom: 9,
       pitch: 35
@@ -314,8 +314,8 @@ export function MapView({ scenario }: Props) {
             const currentFeature = dataRef.current?.features.find((item) => String(item.properties?.id ?? "-") === id);
             setSelectedPoint(
               buildPointComparison(
-                baseFeature as GeoJSON.Feature<PointFeature> | undefined,
-                currentFeature as GeoJSON.Feature<PointFeature> | undefined,
+                baseFeature as GeoJSON.Feature<GeoJSON.Geometry, PointFeature> | undefined,
+                currentFeature as GeoJSON.Feature<GeoJSON.Geometry, PointFeature> | undefined,
                 scenarioRef.current
               )
             );
@@ -406,7 +406,7 @@ export function MapView({ scenario }: Props) {
               risk_score: prediction?.risk_score ?? properties.risk_score,
               risk_class: prediction?.risk_class ?? properties.risk_class
             }
-          };
+          } as GeoJSON.Feature<GeoJSON.Geometry, PointFeature>;
         })
       };
 
@@ -417,8 +417,8 @@ export function MapView({ scenario }: Props) {
         const matched = updated.features.find((feature) => String(feature.properties?.id ?? "-") === selectedPointId);
         setSelectedPoint(
           buildPointComparison(
-            baseFeature as GeoJSON.Feature<PointFeature> | undefined,
-            matched as GeoJSON.Feature<PointFeature> | undefined,
+            baseFeature as GeoJSON.Feature<GeoJSON.Geometry, PointFeature> | undefined,
+            matched as GeoJSON.Feature<GeoJSON.Geometry, PointFeature> | undefined,
             scenario
           )
         );

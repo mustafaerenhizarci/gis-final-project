@@ -1,0 +1,16 @@
+feature,importance
+nbr_before,0.101099
+evi_before,0.096727
+ndvi_before,0.093551
+ndmi_before,0.079267
+distance_to_water,0.0732
+wind_speed,0.067032
+elevation,0.066899
+distance_to_cropland,0.063084
+precipitation,0.062287
+aspect,0.061946
+distance_to_builtup,0.056494
+slope,0.053942
+temperature,0.049352
+soil_moisture,0.041294
+land_cover,0.033826

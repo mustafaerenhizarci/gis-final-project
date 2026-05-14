@@ -1,19 +1,20 @@
 {
   "raw_rows": 1000,
-  "valid_rows_before_balance": 997,
-  "training_rows_after_balance": 996,
+  "valid_rows_before_balance": 1000,
+  "training_rows_after_balance": 1000,
   "label_counts": {
-    "1": 498,
-    "0": 498
+    "1": 500,
+    "0": 500
   },
-  "rejected_counts": {
-    "out_of_range_elevation": 3
+  "rejected_counts": {},
+  "repaired_counts": {
+    "elevation": 3
   },
   "feature_summary": {
     "elevation": {
       "min": 0.0,
       "max": 1358.0,
-      "unique_values": 505,
+      "unique_values": 506,
       "low_variance": false
     },
     "slope": {
@@ -31,25 +32,25 @@
     "ndvi_before": {
       "min": 0.014247313,
       "max": 0.8840032,
-      "unique_values": 995,
+      "unique_values": 999,
       "low_variance": false
     },
     "nbr_before": {
       "min": -0.12042161,
       "max": 0.75776964,
-      "unique_values": 995,
+      "unique_values": 999,
       "low_variance": false
     },
     "ndmi_before": {
       "min": -0.23211412,
       "max": 0.51060486,
-      "unique_values": 996,
+      "unique_values": 1000,
       "low_variance": false
     },
     "evi_before": {
       "min": 0.013338367,
       "max": 0.72533387,
-      "unique_values": 996,
+      "unique_values": 1000,
       "low_variance": false
     },
     "land_cover": {
@@ -85,19 +86,19 @@
     "distance_to_water": {
       "min": 30.0,
       "max": 30000.0,
-      "unique_values": 952,
+      "unique_values": 956,
       "low_variance": false
     },
     "distance_to_builtup": {
       "min": 30.0,
       "max": 5988.7393,
-      "unique_values": 496,
+      "unique_values": 498,
       "low_variance": false
     },
     "distance_to_cropland": {
       "min": 0.0,
       "max": 5265.1494,
-      "unique_values": 505,
+      "unique_values": 507,
       "low_variance": false
     }
   },

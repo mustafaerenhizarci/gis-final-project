@@ -51,6 +51,9 @@
     70,
     80
   ],
-  "training_rows_before_balance": 997,
-  "training_rows_after_balance": 996
+  "training_rows_before_balance": 1000,
+  "training_rows_after_balance": 1000,
+  "repaired_out_of_range_values": {
+    "elevation": 3
+  }
 }

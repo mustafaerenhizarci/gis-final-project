@@ -108,6 +108,22 @@ def invalid_reason(row: dict) -> Optional[str]:
     return None
 
 
+def repair_numeric_ranges(row: dict) -> dict[str, int]:
+    repairs: dict[str, int] = {}
+    for column in [*FEATURE_COLUMNS, *QA_COLUMNS]:
+        value = row[column]
+        if value <= NO_DATA_VALUE + 1:
+            continue
+
+        minimum, maximum = VALID_RANGES[column]
+        repaired = min(max(value, minimum), maximum)
+        if repaired != value:
+            row[column] = repaired
+            repairs[column] = repairs.get(column, 0) + 1
+
+    return repairs
+
+
 def balance_by_label(rows: list[dict]) -> list[dict]:
     grouped: dict[int, list[dict]] = {0: [], 1: []}
     for row in rows:
@@ -183,7 +199,11 @@ def main() -> None:
 
     cleaned_rows = []
     rejected_counts: dict[str, int] = {}
+    repaired_counts: dict[str, int] = {}
     for row in parsed_rows:
+        for column, count in repair_numeric_ranges(row).items():
+            repaired_counts[column] = repaired_counts.get(column, 0) + count
+
         reason = invalid_reason(row)
         if reason:
             rejected_counts[reason] = rejected_counts.get(reason, 0) + 1
@@ -222,6 +242,7 @@ def main() -> None:
                 "non_susceptible_land_cover_excluded": sorted(NON_SUSCEPTIBLE_LAND_COVER),
                 "training_rows_before_balance": len(cleaned_rows),
                 "training_rows_after_balance": len(balanced_rows),
+                "repaired_out_of_range_values": repaired_counts,
             },
             file,
             indent=2,
@@ -240,6 +261,7 @@ def main() -> None:
                 "training_rows_after_balance": len(balanced_rows),
                 "label_counts": label_counts,
                 "rejected_counts": rejected_counts,
+                "repaired_counts": repaired_counts,
                 "feature_summary": summarize_features(balanced_rows),
                 "filters": {
                     "excluded_land_cover": sorted(NON_SUSCEPTIBLE_LAND_COVER),
@@ -256,6 +278,7 @@ def main() -> None:
     print(f"Training rows after balance: {len(balanced_rows)}")
     print(f"Label counts: {label_counts}")
     print(f"Rejected counts: {rejected_counts}")
+    print(f"Repaired counts: {repaired_counts}")
     print(f"Wrote: {dataset_path}")
     print(f"Wrote: {inputs_path}")
     print(f"Wrote: {labels_path}")
