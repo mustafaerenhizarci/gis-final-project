@@ -35,19 +35,19 @@
         "max_depth": null,
         "min_samples_leaf": 1
       },
-      "accuracy": 0.57,
-      "precision": 0.5648,
-      "recall": 0.61,
-      "f1": 0.5865,
-      "roc_auc": 0.6102,
+      "accuracy": 0.565,
+      "precision": 0.5619,
+      "recall": 0.59,
+      "f1": 0.5756,
+      "roc_auc": 0.6126,
       "confusion_matrix": [
         [
-          53,
-          47
+          54,
+          46
         ],
         [
-          39,
-          61
+          41,
+          59
         ]
       ]
     },
@@ -89,7 +89,7 @@
       "precision": 0.5833,
       "recall": 0.63,
       "f1": 0.6058,
-      "roc_auc": 0.6296,
+      "roc_auc": 0.6298,
       "confusion_matrix": [
         [
           55,
@@ -114,7 +114,7 @@
       "precision": 0.5728,
       "recall": 0.59,
       "f1": 0.5813,
-      "roc_auc": 0.5949,
+      "roc_auc": 0.5951,
       "confusion_matrix": [
         [
           56,

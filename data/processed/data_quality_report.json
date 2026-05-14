@@ -7,14 +7,12 @@
     "0": 500
   },
   "rejected_counts": {},
-  "repaired_counts": {
-    "elevation": 3
-  },
+  "repaired_counts": {},
   "feature_summary": {
     "elevation": {
-      "min": 0.0,
+      "min": -1.0,
       "max": 1358.0,
-      "unique_values": 506,
+      "unique_values": 507,
       "low_variance": false
     },
     "slope": {
@@ -111,7 +109,7 @@
     "no_data_value": -9999.0,
     "valid_ranges": {
       "elevation": [
-        0.0,
+        -10.0,
         1500.0
       ],
       "slope": [

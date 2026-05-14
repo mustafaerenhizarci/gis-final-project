@@ -1,7 +1,7 @@
 family,variant,model,accuracy,precision,recall,f1,roc_auc,parameters,confusion_matrix
-random_forest,baseline,random_forest_baseline,0.57,0.5648,0.61,0.5865,0.6102,"{""n_estimators"": 200, ""max_depth"": null, ""min_samples_leaf"": 1}","[[53, 47], [39, 61]]"
+random_forest,baseline,random_forest_baseline,0.565,0.5619,0.59,0.5756,0.6126,"{""n_estimators"": 200, ""max_depth"": null, ""min_samples_leaf"": 1}","[[54, 46], [41, 59]]"
 random_forest,tuned,random_forest_tuned,0.59,0.5804,0.65,0.6132,0.6333,"{""n_estimators"": 500, ""max_depth"": 8, ""min_samples_leaf"": 3}","[[53, 47], [35, 65]]"
-svm,baseline,svm_baseline,0.59,0.5833,0.63,0.6058,0.6296,"{""kernel"": ""rbf"", ""C"": 1.0, ""gamma"": ""scale""}","[[55, 45], [37, 63]]"
-svm,tuned,svm_tuned,0.575,0.5728,0.59,0.5813,0.5949,"{""kernel"": ""rbf"", ""C"": 10.0, ""gamma"": ""scale""}","[[56, 44], [41, 59]]"
+svm,baseline,svm_baseline,0.59,0.5833,0.63,0.6058,0.6298,"{""kernel"": ""rbf"", ""C"": 1.0, ""gamma"": ""scale""}","[[55, 45], [37, 63]]"
+svm,tuned,svm_tuned,0.575,0.5728,0.59,0.5813,0.5951,"{""kernel"": ""rbf"", ""C"": 10.0, ""gamma"": ""scale""}","[[56, 44], [41, 59]]"
 logistic_regression,baseline,logistic_regression_baseline,0.59,0.5918,0.58,0.5859,0.6236,"{""C"": 1.0, ""penalty"": ""l2"", ""solver"": ""lbfgs""}","[[60, 40], [42, 58]]"
 logistic_regression,tuned,logistic_regression_tuned,0.59,0.5882,0.6,0.5941,0.6145,"{""C"": 0.3, ""penalty"": ""l2"", ""solver"": ""lbfgs""}","[[58, 42], [40, 60]]"

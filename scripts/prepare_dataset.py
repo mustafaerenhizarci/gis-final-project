@@ -47,7 +47,7 @@ NO_DATA_VALUE = -9999.0
 BALANCE_SEED = 42
 
 VALID_RANGES = {
-    "elevation": (0.0, 1500.0),
+    "elevation": (-10.0, 1500.0),
     "slope": (0.0, 60.0),
     "aspect": (0.0, 360.0),
     "ndvi_before": (-1.0, 1.0),
